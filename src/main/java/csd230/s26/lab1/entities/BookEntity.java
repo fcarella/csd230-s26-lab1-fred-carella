@@ -3,6 +3,8 @@ package csd230.s26.lab1.entities;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
+import java.util.Objects;
+
 @Entity
 @DiscriminatorValue("BOOK")
 public class BookEntity extends PublicationEntity {
@@ -24,5 +26,25 @@ public class BookEntity extends PublicationEntity {
     @Override
     public void sellItem() {
         System.out.println("Selling Book");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        BookEntity that = (BookEntity) o;
+        return Objects.equals(author, that.author);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), author);
+    }
+
+    @Override
+    public String toString() {
+        return "BookEntity{" +
+                "author='" + author + '\'' +
+                "} " + super.toString();
     }
 }

@@ -19,18 +19,23 @@ public class Lab1Application implements CommandLineRunner {
 	private final DiscMagRepository discMagRepository;
 	private final TicketRepository ticketRepository;
 	private final ProductRepository productRepository;
+	private final CartRepository cartRepository;
+
 
 	// Hardened Constructor Injection (Standard for S26)
 	public Lab1Application(BookRepository bookRepository,
 						   MagazineRepository magazineRepository,
 						   DiscMagRepository discMagRepository,
 						   TicketRepository ticketRepository,
-						   ProductRepository productRepository) {
+						   ProductRepository productRepository,
+						   CartRepository cartRepository) {
 		this.bookRepository = bookRepository;
 		this.magazineRepository = magazineRepository;
 		this.discMagRepository = discMagRepository;
 		this.ticketRepository = ticketRepository;
 		this.productRepository = productRepository;
+		this.cartRepository = cartRepository;
+
 	}
 
 	public static void main(String[] args) {
@@ -110,5 +115,26 @@ public class Lab1Application implements CommandLineRunner {
 			// executes the specific implementation for the subclass.
 			System.out.println(product.toString());
 		});
+
+		// 1. Create and save a Cart
+		CartEntity cart = new CartEntity();
+		cartRepository.save(cart);
+
+// 2. Retrieve an existing book from your generation loop
+		// get the first book
+		BookEntity someBook = bookRepository.findAll().get(0);  // ... retrieve one of your generated books ...
+
+// 3. Add to cart and save
+		cart.addProduct(someBook);
+		cartRepository.save(cart);
+
+// 4. Verification Output
+		System.out.println("\n--- Cart Verification ---");
+		cartRepository.findAll().forEach(c -> {
+			System.out.println("Cart ID: " + c.getId());
+			c.getProducts().forEach(p -> System.out.println(" - Contains: " + p.toString()));
+		});
+
+
 	}
 }

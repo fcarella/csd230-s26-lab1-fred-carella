@@ -4,6 +4,7 @@ import csd230.s26.lab1.pojos.SaleableItem;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -14,6 +15,15 @@ public abstract class ProductEntity implements Serializable, SaleableItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // ... existing fields (id, productId) ...
+
+    @ManyToMany(mappedBy = "products")
+    private Set<CartEntity> carts = new java.util.HashSet<>();
+
+    public Set<CartEntity> getCarts() { return carts; }
+    public void setCarts(Set<CartEntity> carts) { this.carts = carts; }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -48,4 +58,6 @@ public abstract class ProductEntity implements Serializable, SaleableItem {
                 ", productId='" + productId + '\'' +
                 '}';
     }
+
+
 }
